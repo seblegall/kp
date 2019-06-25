@@ -21,9 +21,9 @@ kp -c {container_id} /path/to/my/file /tmp
 ``` 
 
 * `container_id` is the container ID you can get by running `docker ps`
-* `/path/to/my/file` is your source file you want to copy. It can be a single file
-or a directory. With Kopy you don't even have to precise your want to copy a directory.
-* `/tmp` is the path where to copy the files in the container. 
+* `/path/to/my/file` is the source file you want to copy. It can be a single file
+or a directory. With Kopy you don't even have to precise you want to copy a directory.
+* `/tmp` is the path where to copy the file in the container. 
 
 Example with Kubernetes :
 
@@ -34,7 +34,7 @@ kp -c {pod_name} -n {namespace} -c {container} /path/to/my/file /tmp
 * `pod_name` is the pod running your container
 * `namespace` is the namespace running the pod. Default is `default`
 * `container` is the specific container running in the pod.
-If not set, it will take the first one. 
+If not set, it will take the first one available.
 
 ## Install
 
