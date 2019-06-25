@@ -1,7 +1,7 @@
 # kp - kopy
 
 Kopy is a very simple tool offering a very strong power : ability to copy a file
-or a directory from local file system to a running container file system (almost) natively.
+or a directory from local file system to a **running** container file system (almost) natively.
 
 * No need to install anything else than Kopy
 * No need to run any daemon or daemonSet (Kubernetes)
@@ -10,7 +10,7 @@ or a directory from local file system to a running container file system (almost
 * No need to add anything in your Dockerfile
 
 `kp` simply works like a regular `cp` but from local to a running container.
-The container may be run by Docker or by Kubernetes, inside a pod. Kopy support both.
+The container may be run by **Docker** or by **Kubernetes**, inside a pod. Kopy support both.
 
 ## Usage
 
@@ -25,7 +25,7 @@ kp -c {container_id} /path/to/my/file /tmp
 or a directory. With Kopy you don't even have to precise you want to copy a directory.
 * `/tmp` is the path where to copy the file in the container. 
 
-Example with Kubernetes :
+Example with pod from a Kubernetes cluster :
 
 ````bash
 kp -c {pod_name} -n {namespace} -c {container} /path/to/my/file /tmp 
