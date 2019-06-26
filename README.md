@@ -41,3 +41,33 @@ If not set, it will take the first one available.
 ````bash
 go install github.com/seblegall/kp
 ````
+
+
+## requirements and limitations
+
+**Kopy doesn't have any requirements and (almost) any limitations.**
+
+Of course, since Kopy purpose is to copy-past files from local to a running
+container you will need a running container either on Docker or on Kubernetes. That's it !
+
+Internally, Kopy read the files to copy and write a *tar* to the input of a *untar*
+command running from inside the container. It means that your container must be able to
+execute a tar command. Which is the case for **almost** all distro-based containers.
+
+*(I haven't checked yet, but it shouldn't work for [distroless](https://github.com/GoogleContainerTools/distroless) containers)*
+
+
+## Known issues
+
+Kopy haven't any known issues. It just works.
+
+However, if you find one, feel free to create an issue and
+I will explain you why your issue is not relevant.
+
+## The code seems familiar to you?
+
+keep calm and breathe. It's perfectly normal.
+
+Most of the code used in Kopy is copied from the [Skaffold](https://github.com/GoogleContainerTools/skaffold)
+code base without any reference to the authors. I've just stolen it because I found it super smart and
+I though I could became a Github rock star if I had the idea myself.
