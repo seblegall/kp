@@ -28,11 +28,18 @@ func main() {
 
 	files, err := ListFiles(src, dest)
 	if err != nil {
-		logrus.Fatal(err.Error())
+		logrus.WithFields(logrus.Fields{
+			"source": src,
+			"destination": dest,
+		}).Fatal(err.Error())
 	}
 
-	if err := CopyFiles(container,pod, namespace, files); err != nil {
-		logrus.Fatal(err)
+	if err := CopyFiles(container, pod, namespace, files); err != nil {
+		logrus.WithFields(logrus.Fields{
+			"namespace": namespace,
+			"pod": pod,
+			"container": container,
+		}).Fatal(err)
 	}
 
 }
@@ -40,9 +47,18 @@ func main() {
 
 //initConfig reads the flags value, setup the log level an pars cmd args
 func initConfig() {
+
+	flag.Usage = func() {
+		fmt.Printf("Copying files or directories from local file system " +
+			"to a running container file system (almost) natively\n\n")
+		fmt.Printf("Usage:\n  kp [flags] source destination\n\n")
+		flag.PrintDefaults()
+	}
+
+
 	flag.StringVar(&container, "c", "", "container ID" )
 	flag.StringVar(&pod, "p", "", "pod name" )
-	flag.StringVar(&namespace, "n", "default", "kubernetes namespace")
+	flag.StringVar(&namespace, "n", "", "kubernetes namespace")
 	flag.StringVar(&verbosity, "v", logrus.InfoLevel.String(), "Log level (debug, info, warn, error, fatal, panic")
 	flag.Parse()
 
@@ -51,7 +67,7 @@ func initConfig() {
 	}
 
 	if container == "" && pod == ""{
-		logrus.Fatal("Please, provide a container ID or a pod name")
+		logrus.Fatal("Please, provide at least a container ID or a pod name")
 	}
 
 	src = filepath.Clean(flag.Arg(0))
@@ -164,7 +180,7 @@ func CopyFiles(container, pod, namespace string, files map[string]string) error 
 
 	err = cmd.Wait()
 	if err != nil {
-		return fmt.Errorf("Running %s: stdout %s, stderr: %s, err: %v", cmd.Args, stdout, stderr, err)
+		return fmt.Errorf("%s", stderr)
 	}
 
 	if len(stderr) > 0 {
@@ -177,17 +193,33 @@ func CopyFiles(container, pod, namespace string, files map[string]string) error 
 
 //computeCommand returns the right command to execute depending on the context (Docker or Kubernetes)
 func computeCommand(container, pod, namespace string) *exec.Cmd {
+
+	//if no pod provided, it has to be a docker run
 	if pod == "" {
 		return exec.Command("docker", "exec", "-i", container, "tar", "xmf", "-",
 			"-C", "/", "--no-same-owner")
 	}
 
-	if container != "" {
+	//if both container and namespace are provided
+	if container != "" && namespace != "" {
 		return exec.Command( "kubectl", "exec", pod, "--namespace", namespace, "-c", container, "-i",
 			"--", "tar", "xmf", "-", "-C", "/", "--no-same-owner")
 	}
 
-	return exec.Command( "kubectl", "exec", pod, "--namespace", namespace, "-i",
+	//if only container is provided
+	if container != "" {
+		return exec.Command( "kubectl", "exec", pod, "-c", container, "-i",
+			"--", "tar", "xmf", "-", "-C", "/", "--no-same-owner")
+	}
+
+	//if only namespace is provided
+	if namespace != "" {
+		return exec.Command( "kubectl", "exec", pod, "--namespace", namespace, "-i",
+			"--", "tar", "xmf", "-", "-C", "/", "--no-same-owner")
+	}
+
+	//if no container neither namespace are provided
+	return exec.Command( "kubectl", "exec", pod, "-i",
 		"--", "tar", "xmf", "-", "-C", "/", "--no-same-owner")
 }
 

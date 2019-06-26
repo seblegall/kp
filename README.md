@@ -31,8 +31,9 @@ Example with pod from a Kubernetes cluster :
 kp -p {pod_name} -n {namespace} -c {container} /path/to/my/file /tmp 
 ````
 
-* `pod_name` is the pod running your container
-* `namespace` is the namespace running the pod. Default is `default`
+* `pod_name` is the pod running your container. You can get it by running `kubctl get pods`
+* `namespace` is the namespace running the pod. If not provided, Kopy will 
+use the current namespace.
 * `container` is the specific container running in the pod.
 If not set, it will take the first one available.
 
