@@ -28,7 +28,7 @@ or a directory. With Kopy you don't even have to precise you want to copy a dire
 Example with pod from a Kubernetes cluster :
 
 ````bash
-kp -c {pod_name} -n {namespace} -c {container} /path/to/my/file /tmp 
+kp -p {pod_name} -n {namespace} -c {container} /path/to/my/file /tmp 
 ````
 
 * `pod_name` is the pod running your container
