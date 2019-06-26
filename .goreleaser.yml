@@ -1,0 +1,14 @@
+builds:
+  - binary: kp
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
