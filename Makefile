@@ -2,6 +2,7 @@
 SHELL := $(shell which bash)
 OSARCH := "linux/amd64 linux/386 windows/amd64 windows/386 darwin/amd64 darwin/386"
 ENV = /usr/bin/env
+GO111MODULE=on
 
 .SHELLFLAGS = -c
 
@@ -17,13 +18,13 @@ help: ## Show Help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 build: ## Build Kopy
-	go build
+	$(ENV) go build
 
 cross-build: ## Build blackbeard for multiple os/arch
-	gox -osarch=$(OSARCH) -output "bin/kp{{.OS}}_{{.Arch}}"
+	$(ENV) gox -osarch=$(OSARCH) -output "bin/kp{{.OS}}_{{.Arch}}"
 
 test: ## Launch tests
-	go test -v ./...
+	$(ENV) go test -v ./...
 
 release: ## Publish a new release of Kopy
 	goreleaser --rm-dist
