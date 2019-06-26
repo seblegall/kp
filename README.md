@@ -39,10 +39,17 @@ If not set, it will take the first one available.
 
 ## Install
 
+For noobs :
+
 ````bash
-go install github.com/seblegall/kp
+curl -sf  https://raw.githubusercontent.com/seblegall/kp/master/install.sh | sh -s -- -b /usr/local/bin
 ````
 
+For Go rock stars :
+
+````bash
+go get github.com/seblegall/kp
+````
 
 ## requirements and limitations
 
