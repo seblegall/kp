@@ -39,10 +39,18 @@ If not set, it will take the first one available.
 
 ## Install
 
-For noobs :
+For noobs on Linux or MacOs:
 
 ````bash
-curl -sf  https://raw.githubusercontent.com/seblegall/kp/master/install.sh | sh -s -- -b /usr/local/bin
+# download kp and put it in your /usr/local/bin directory (should be in your $PATH)
+curl -sf  https://raw.githubusercontent.com/seblegall/kp/master/install.sh | sudo sh -s -- -b /usr/local/bin
+````
+
+For noobs on Windows:
+
+````bash
+# creates a ./bin directory where you can find the kp.exe file
+curl -sf  https://raw.githubusercontent.com/seblegall/kp/master/install.sh
 ````
 
 For Go rock stars :
